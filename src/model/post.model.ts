@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 export interface PostInput {
   title: string
   content: string
+  userId : string
   comments?: string[]
 }
 
@@ -16,6 +17,7 @@ const postSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
 
     deletedAt: { type: Date, default: null },
