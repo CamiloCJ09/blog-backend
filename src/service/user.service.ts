@@ -3,7 +3,6 @@ import bcrypt from "bcrypt"
 import authServices from "../middleware/auth"
 
 class UserService {
-
   login = async (email: string, password: string) => {
     try {
       console.log("user service")
@@ -40,7 +39,7 @@ class UserService {
     try {
       console.log("user service")
       console.log(user)
-      if(await UserModel.findOne({ email: user.email })) {
+      if (await UserModel.findOne({ email: user.email })) {
         throw new Error("Email already exists")
       }
       user.password = await bcrypt.hash(user.password, 10)

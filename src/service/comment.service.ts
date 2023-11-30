@@ -14,23 +14,39 @@ class CommentService {
     }
   }
 
-  async create(comment: CommentInput) {
+  validateUser = async (userId: string) => {
     try {
-      this.validateComment(comment.content)
-
-      const user = await UserModel.findById(comment.userId)
+      const user = await UserModel.findById(userId)
       if (!user) {
         throw new Error("User not found")
       }
-      const post = await PostModel.findById(comment.postId)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  validatePost = async (postId: string) => {
+    try {
+      const post = await PostModel.findById(postId)
       if (!post) {
         throw new Error("Post not found")
       }
+      return post
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async create(comment: CommentInput) {
+    try {
+      await this.validateComment(comment.content)
+      await this.validateUser(comment.userId)
+      const post = await this.validatePost(comment.postId)
 
       const newComment = await CommentModel.create(comment)
       post.comments?.push(newComment._id)
       await post.save()
-      
+
       return newComment
     } catch (error) {
       throw error
@@ -58,6 +74,11 @@ class CommentService {
   async delete(id: String) {
     try {
       const deletedComment = await CommentModel.findByIdAndDelete(id)
+      await PostModel.updateOne(
+        { comments: id },
+        { $pull: { comments: id } }
+      )
+      
       return deletedComment
     } catch (error) {
       throw error

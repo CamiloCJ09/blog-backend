@@ -2,7 +2,6 @@ import PostModel, { PostInput } from "../model/post.model"
 import UserModel from "../model/user.model"
 
 class PostService {
-
   validatePost = async (title: string, content: string) => {
     try {
       if (!title) {
@@ -18,7 +17,6 @@ class PostService {
 
   async create(post: PostInput) {
     try {
-
       this.validatePost(post.title, post.content)
 
       const user = await UserModel.findById(post.userId)
@@ -27,7 +25,7 @@ class PostService {
       }
 
       const newPost = await PostModel.create(post)
-      
+
       user.posts?.push(newPost._id)
       await user.save()
 
@@ -69,6 +67,8 @@ class PostService {
   async delete(id: String) {
     try {
       const deletedPost = await PostModel.findByIdAndDelete(id)
+      await UserModel.updateOne({ posts: id }, { $pull: { posts: id } })
+
       return deletedPost
     } catch (error) {
       throw error
