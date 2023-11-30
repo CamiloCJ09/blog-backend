@@ -3,12 +3,15 @@ import { Express } from "express"
 import dotenv from "dotenv"
 import { db } from "./config/connect"
 import routes from "./routes"
+import cors from 'cors';
 
 dotenv.config()
 const app: Express = express()
-
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cors({
+  origin: '*'
+}));
 
 routes(app)
 const port: Number = parseInt(process.env.PORT || "") || 3000
