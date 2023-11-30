@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema(
 );
 
 // Create a mongoose model named "User" based on the defined schema
-const User = mongoose.model<UserDocument>("User", userSchema);
+const UserModel = mongoose.model<UserDocument>("User", userSchema);
 
 // Export the User model for use in other parts of the application
-export default User;
+export default UserModel;

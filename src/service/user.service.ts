@@ -1,8 +1,49 @@
 import UserModel, { UserInput } from "../model/user.model"
+import bcrypt from "bcrypt"
+import authServices from "../middleware/auth"
 
 class UserService {
+
+  login = async (email: string, password: string) => {
+    try {
+      console.log("user service")
+      const user = await this.validateUser(email, password)
+      const token = authServices.generateToken(user._id)
+      return token
+    } catch (error) {
+      throw error
+    }
+  }
+
+  validateUser = async (email: string, password: string) => {
+    try {
+      console.log("validate user")
+      const user = await UserModel.findOne({ email: email })
+      if (!user) {
+        console.log("user not found")
+        throw new Error("Email does not exist")
+      }
+
+      const validPassword = await bcrypt.compare(password, user.password)
+      if (!validPassword) {
+        console.log("password not correct")
+        throw new Error("Password is not correct")
+      }
+
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
+
   async create(user: UserInput) {
     try {
+      console.log("user service")
+      console.log(user)
+      if(await UserModel.findOne({ email: user.email })) {
+        throw new Error("Email already exists")
+      }
+      user.password = await bcrypt.hash(user.password, 10)
       const newUser = await UserModel.create(user)
       return newUser
     } catch (error) {
@@ -37,3 +78,5 @@ class UserService {
     }
   }
 }
+
+export default new UserService()

@@ -28,6 +28,6 @@ const postSchema = new mongoose.Schema(
   }
 )
 
-const Post = mongoose.model<PostDocument>("Post", postSchema)
+const PostModel = mongoose.model<PostDocument>("Post", postSchema)
 
-export default Post
+export default PostModel
