@@ -26,9 +26,6 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
     const decoded = jwt.verify(token, secretKey)
     req.body.loggedUser = decoded
 
-    // Log the decoded token for debugging purposes
-    console.log("Decoded token:", req.body.loggedUser)
-
     // Continue to the next middleware or route handler
     next()
   } catch (error) {

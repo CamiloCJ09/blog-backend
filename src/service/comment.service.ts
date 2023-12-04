@@ -78,8 +78,23 @@ class CommentService {
         { comments: id },
         { $pull: { comments: id } }
       )
-      
+
       return deletedComment
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async edit(id: string, comment: CommentInput) {
+    try {
+      const updatedComment = await CommentModel.findByIdAndUpdate(
+        id,
+        comment,
+        {
+          new: true,
+        }
+      )
+      return updatedComment
     } catch (error) {
       throw error
     }

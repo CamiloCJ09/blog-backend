@@ -1,5 +1,6 @@
 import PostModel, { PostInput } from "../model/post.model"
 import UserModel from "../model/user.model"
+import Comment from "../model/comment.model"
 
 class PostService {
   validatePost = async (title: string, content: string) => {
@@ -66,9 +67,10 @@ class PostService {
 
   async delete(id: String) {
     try {
-      const deletedPost = await PostModel.findByIdAndDelete(id)
       await UserModel.updateOne({ posts: id }, { $pull: { posts: id } })
-
+      await Comment.deleteMany({ postId: id })
+      const deletedPost = await PostModel.findByIdAndDelete(id)
+      
       return deletedPost
     } catch (error) {
       throw error

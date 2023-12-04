@@ -10,9 +10,6 @@ const postController = new PostController();
 const commentController = new CommentController();
 
 const routes = (app: Express) => {
-  app.get("/", (req: Request, res: Response) => {
-    res.send("Hello World!");
-  });
 
   app.post("/login", userController.login);
 
@@ -27,6 +24,8 @@ const routes = (app: Express) => {
   app.delete("/posts/:id", authServices.auth, postController.delete);
 
   app.post("/comments", authServices.auth, commentController.create);
+  app.get("/comments/:postId", authServices.auth, commentController.findByPostId);
+  app.put("/comments/:id", authServices.auth, commentController.edit);
   app.get("/comments", authServices.auth, commentController.findAll);
   app.delete("/comments/:id", authServices.auth, commentController.delete);
 };

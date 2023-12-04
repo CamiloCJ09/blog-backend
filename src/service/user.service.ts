@@ -8,7 +8,12 @@ class UserService {
       console.log("user service")
       const user = await this.validateUser(email, password)
       const token = authServices.generateToken(user._id)
-      return token
+      
+      const response = {
+        token: token,
+        userId: user._id,
+      }
+      return response
     } catch (error) {
       throw error
     }
