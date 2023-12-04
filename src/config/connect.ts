@@ -13,7 +13,6 @@ const connectionString = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/Nod
 // Connect to MongoDB using the provided connection string
 export const db = mongoose.connect(connectionString).then(() => {
     // Log a message when successfully connected to MongoDB
-    console.log("Connected to MongoDB");
 }).catch((err) => {
     // Log any errors that occur during the connection process
     console.log(err);

@@ -5,7 +5,6 @@ import authServices from "../middleware/auth"
 class UserService {
   login = async (email: string, password: string) => {
     try {
-      console.log("user service")
       const user = await this.validateUser(email, password)
       const token = authServices.generateToken(user._id)
       
@@ -21,16 +20,13 @@ class UserService {
 
   validateUser = async (email: string, password: string) => {
     try {
-      console.log("validate user")
       const user = await UserModel.findOne({ email: email })
       if (!user) {
-        console.log("user not found")
         throw new Error("Email does not exist")
       }
 
       const validPassword = await bcrypt.compare(password, user.password)
       if (!validPassword) {
-        console.log("password not correct")
         throw new Error("Password is not correct")
       }
 
@@ -42,8 +38,6 @@ class UserService {
 
   async create(user: UserInput) {
     try {
-      console.log("user service")
-      console.log(user)
       if (await UserModel.findOne({ email: user.email })) {
         throw new Error("Email already exists")
       }

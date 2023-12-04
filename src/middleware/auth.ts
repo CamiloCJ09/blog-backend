@@ -89,7 +89,6 @@ const hasAnyRole =
 
 // Function to refresh an expired token
 function refreshToken(token: string): string {
-  console.log("Refreshing token...")
   const tokenPayload = jwt.decode(token) as jwt.JwtPayload
   return generateToken({
     email: tokenPayload.email,
